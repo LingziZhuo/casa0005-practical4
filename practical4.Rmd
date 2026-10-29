@@ -1,0 +1,56 @@
+---
+title: "CASA0005 Practical 4: Git, GitHub and RMarkdown"
+author: "LingziZhuo"
+output:
+  html_document:
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+## Purpose
+
+This document demonstrates reproducible R code, explanatory text and a plot.
+It uses the built-in `airquality` dataset so it can run without external files.
+The Practical 3 raster example remains a separate step requiring its data.
+
+## Inspect the data
+
+```{r inspect}
+head(airquality)
+summary(airquality$Temp)
+```
+
+## Draw a plot
+
+```{r plot, fig.width=7, fig.height=4, echo=FALSE}
+plot(airquality$Temp, airquality$Ozone,
+     xlab = "Temperature (degrees Fahrenheit)",
+     ylab = "Ozone (ppb)", pch = 19, col = "steelblue",
+     main = "New York air quality, May–September 1973")
+```
+
+This chunk displays the plot while hiding its code with `echo=FALSE`.
+Missing observations are omitted from the plot. This is an association,
+not evidence of a causal effect.
+
+## Show code without running it
+
+The course raster exercise requires packages `terra`, `here`, and the
+Practical 3 temperature raster. Once those are available, change
+`eval=FALSE` to `eval=TRUE` and knit again.
+
+```{r course-raster, eval=FALSE}
+library(terra)
+library(here)
+jan <- terra::rast(here("prac3_data", "wc2.1_5m_tavg_01.tif"))
+plot(jan)
+```
+
+## Reproducibility
+
+```{r session}
+sessionInfo()
+```
