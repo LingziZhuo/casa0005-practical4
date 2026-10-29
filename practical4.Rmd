@@ -14,7 +14,7 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 
 This document demonstrates reproducible R code, explanatory text and a plot.
 It uses the built-in `airquality` dataset so it can run without external files.
-The Practical 3 raster example remains a separate step requiring its data.
+The Practical 3 example below uses the WorldClim 2.1 January mean temperature raster.
 
 ## Inspect the data
 
@@ -36,17 +36,26 @@ This chunk displays the plot while hiding its code with `echo=FALSE`.
 Missing observations are omitted from the plot. This is an association,
 not evidence of a causal effect.
 
-## Show code without running it
+## WorldClim January mean temperature
 
-The course raster exercise requires packages `terra`, `here`, and the
-Practical 3 temperature raster. Once those are available, change
-`eval=FALSE` to `eval=TRUE` and knit again.
+The raster is WorldClim 2.1 monthly mean temperature for January,
+representing the 1970–2000 climate baseline, at 5 arc-minute resolution.
+Values are in degrees Celsius. Source: [WorldClim](https://www.worldclim.org/data/worldclim21.html).
+Run `source("prepare-data.R")` once if the data are missing.
 
-```{r course-raster, eval=FALSE}
+```{r course-raster, fig.width=9, fig.height=5}
 library(terra)
 library(here)
 jan <- terra::rast(here("prac3_data", "wc2.1_5m_tavg_01.tif"))
 plot(jan)
+```
+
+## Show code without running it
+
+The following chunk displays code without executing it.
+
+```{r unevaluated-example, eval=FALSE}
+summary(jan)
 ```
 
 ## Reproducibility

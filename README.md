@@ -4,20 +4,22 @@ Personal practice project for Git, GitHub and RMarkdown.
 
 ## Open and render
 
-Open `casa0005-practical4.Rproj` in RStudio. Install `rmarkdown` if needed,
-then open `practical4.Rmd` and click Knit to generate HTML.
+Open `casa0005-practical4.Rproj` in RStudio. On a new computer, run
+`source("install-packages.R")` and `source("prepare-data.R")` first.
+Then open `practical4.Rmd` and click Knit to generate HTML.
 
-The example uses built-in data. The course raster chunk is displayed but
-not executed until Practical 3 data and packages are available.
+The document uses built-in data and the WorldClim 2.1 January average
+temperature raster (1970–2000, 5 arc-minute resolution, degrees Celsius).
+The source archive is about 121 MB; the preparation script extracts January.
+Data and local package installations are excluded from Git. Data source:
+https://www.worldclim.org/data/worldclim21.html
 
 ## Remaining course exercises
 
-- Create a public GitHub repository under your own account.
-- Connect this local repository and push the commits.
-- Edit README on GitHub, commit, then pull locally.
-- Fork octocat/Spoon-Knife, create a branch in your fork, edit README,
-  open a pull request targeting your own fork, and squash and merge.
-- Complete and run the Practical 3 raster chunk.
+- GitHub repository created; initial commits pushed successfully.
+- README edited on GitHub and pulled locally successfully.
+- Spoon-Knife fork, practice branch and PR #1 completed and merged:
+  https://github.com/LingziZhuo/Spoon-Knife/pull/1
 
 The homework in section 4.2 is separate: join GII data for 2010 and 2019
 to world boundaries, calculate GII_2019 minus GII_2010, publish the work,
