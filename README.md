@@ -24,3 +24,4 @@ to world boundaries, calculate GII_2019 minus GII_2010, publish the work,
 and enter the repository URL in the class spreadsheet.
 
 Do not put passwords or access tokens in project files.
+This line was added on GitHub to practise git pull.
