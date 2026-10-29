@@ -1,0 +1,257 @@
+---
+title: "Gender Inequality Change, 2010–2019"
+author: "LingziZhuo"
+output: html_document
+---
+
+## Research question
+
+How did gender inequality change across countries between 2010 and 2019?
+
+## Measure of change
+
+We calculate change as:
+
+GII change = GII in 2019 - GII in 2010
+
+- A negative value indicates a decrease in gender inequality.
+- A positive value indicates an increase in gender inequality.
+- Zero indicates no change in the reported index.
+
+## Check the project folder
+
+```{r check-folder}
+getwd()
+```
+## Read the original data
+
+```{r read-data}
+gii_raw <- read.csv(
+  "data/HDR25_Composite_indices_complete_time_series.csv"
+)
+
+dim(gii_raw)
+head(names(gii_raw), 20)
+```
+## Locate the GII columns
+
+```{r inspect-gii}
+required_columns <- c("iso3", "country", "gii_2010", "gii_2019")
+
+required_columns %in% names(gii_raw)
+
+str(gii_raw[required_columns])
+
+head(gii_raw[required_columns])
+```
+## Calculate GII change
+
+```{r calculate-change}
+gii <- gii_raw[required_columns]
+
+gii$gii_change <- gii$gii_2019 - gii$gii_2010
+
+head(gii)
+
+colSums(is.na(gii[c("gii_2010", "gii_2019", "gii_change")]))
+```
+## Check country identifiers
+
+```{r check-identifiers}
+anyDuplicated(gii$iso3)
+
+tail(gii, 12)
+```
+## Separate country records from aggregates
+
+```{r filter-countries}
+is_country <- grepl("^[A-Z]{3}$", gii$iso3)
+
+gii[!is_country, c("iso3", "country")]
+
+gii_countries <- gii[is_country, ]
+
+nrow(gii_countries)
+sum(!is.na(gii_countries$gii_change))
+```
+After excluding 11 aggregate records, the dataset contains 195
+country or territory records. Of these, 154 have GII values for
+both 2010 and 2019, allowing the change to be calculated.
+The remaining 41 records have missing change values.
+## Prepare spatial analysis
+
+```{r load-sf}
+library(sf)
+```
+## Read the world boundaries
+
+```{r read-world}
+world <- st_read(
+  "data/World_Countries_(Generalized)_2173680399808997149.geojson",
+  quiet = TRUE
+)
+
+nrow(world)
+names(world)
+head(st_drop_geometry(world))
+```
+## Standardise country codes
+
+```{r standardise-codes}
+library(countrycode)
+
+world$iso3 <- countrycode(
+  world$ISO,
+  origin = "iso2c",
+  destination = "iso3c"
+)
+
+head(st_drop_geometry(world)[c("COUNTRY", "ISO", "iso3")])
+
+st_drop_geometry(world)[is.na(world$iso3), c("COUNTRY", "ISO")]
+```
+## Join GII data to world boundaries
+
+```{r join-data}
+match_row <- match(world$iso3, gii_countries$iso3)
+
+world_gii <- world
+
+world_gii$gii_2010 <- gii_countries$gii_2010[match_row]
+world_gii$gii_2019 <- gii_countries$gii_2019[match_row]
+world_gii$gii_change <- gii_countries$gii_change[match_row]
+
+nrow(world_gii)
+sum(!is.na(match_row))
+sum(!is.na(world_gii$gii_change))
+
+head(st_drop_geometry(world_gii)[
+  c("COUNTRY", "iso3", "gii_2010", "gii_2019", "gii_change")
+])
+```
+## Check repeated map codes
+
+```{r check-map-duplicates}
+repeated_code <- duplicated(world$iso3) |
+  duplicated(world$iso3, fromLast = TRUE)
+
+st_drop_geometry(world)[
+  repeated_code,
+  c("COUNTRY", "ISO", "iso3")
+]
+```
+## Check coverage by unique country code
+
+```{r check-coverage}
+length(unique(world_gii$iso3[!is.na(match_row)]))
+
+length(unique(
+  world_gii$iso3[!is.na(world_gii$gii_change)]
+))
+
+gii_countries[
+  !gii_countries$iso3 %in% world$iso3,
+  c("country", "iso3", "gii_change")
+]
+```
+```{r map-gii, fig.width=12, fig.height=7}
+breaks <- c(-1, -0.10, -0.05, 0, 0.05, 0.10, 1)
+
+palette <- c(
+  "#2166AC", "#67A9CF", "#D1E5F0",
+  "#FDDBC7", "#EF8A62", "#B2182B"
+)
+
+change_group <- cut(
+  world_gii$gii_change,
+  breaks = breaks,
+  include.lowest = TRUE
+)
+
+map_colours <- palette[as.integer(change_group)]
+map_colours[is.na(world_gii$gii_change)] <- "grey85"
+
+plot(
+  st_geometry(world_gii),
+  col = map_colours,
+  border = "grey50",
+  main = "GII change: 2019 minus 2010"
+)
+
+legend(
+  "bottomleft",
+  legend = c(
+    "[-1, -0.10]", "(-0.10, -0.05]", "(-0.05, 0]",
+    "(0, 0.05]", "(0.05, 0.10]", "(0.10, 1]",
+    "No data"
+  ),
+  fill = c(palette, "grey85"),
+  title = "Change in GII",
+  cex = 0.7,
+  bg = "white"
+)
+```
+## Summarise the direction of change
+
+```{r summarise-change}
+change <- gii_countries$gii_change
+
+c(
+  decreased = sum(change < 0, na.rm = TRUE),
+  unchanged = sum(change == 0, na.rm = TRUE),
+  increased = sum(change > 0, na.rm = TRUE),
+  missing = sum(is.na(change))
+)
+```
+## Findings and limitations
+
+Among the 154 countries or territories with GII data for both
+2010 and 2019, 145 (94.2%) recorded a decrease in GII and
+9 (5.8%) recorded an increase. None had an exactly zero change
+in the reported values.
+
+A further 41 records lacked sufficient data to calculate change.
+The findings therefore describe countries and territories with
+available data, rather than every country or territory.
+
+The map shows changes in GII, not the level of GII in 2019.
+A large decrease does not necessarily mean that the final level
+of gender inequality was low. This descriptive comparison does
+not establish the causes of change.
+
+## Data sources and method
+
+GII data were obtained from the UNDP Human Development Report
+2025 composite indices time-series dataset. Values for 2010
+and 2019 were taken from the same release.
+
+Source: <https://hdr.undp.org/data-center/documentation-and-downloads>
+
+World boundaries were obtained from the World Countries
+Generalized dataset in GeoJSON format.
+
+Source: <https://hub.arcgis.com/datasets/2b93b06dc0dc4e809d3c8db5cb96ba69_0/explore>
+
+Eleven aggregate records were excluded from the GII table.
+Two-letter boundary codes were converted to three-letter ISO
+codes using the countrycode package. The datasets were then
+matched by these codes.
+
+Change was calculated as GII in 2019 minus GII in 2010.
+Missing values were retained. Summary counts used the GII
+country table to avoid counting separate map parts more than once.
+
+## Reproducing the analysis
+
+Open the RStudio project. The required packages are rmarkdown,
+sf and countrycode.
+
+Place the original UNDP CSV and world boundaries GeoJSON in
+the data folder, retaining the filenames used in this document.
+Open homework_gii.Rmd and click Knit.
+
+## Software environment
+
+```{r software-environment}
+sessionInfo()
+```
