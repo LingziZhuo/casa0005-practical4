@@ -27,7 +27,7 @@ getwd()
 
 ```{r read-data}
 gii_raw <- read.csv(
-  "data/HDR25_Composite_indices_complete_time_series.csv"
+  "../data/HDR25_Composite_indices_complete_time_series.csv"
 )
 
 dim(gii_raw)
@@ -87,7 +87,7 @@ library(sf)
 
 ```{r read-world}
 world <- st_read(
-  "data/World_Countries_(Generalized)_2173680399808997149.geojson",
+  "../data/World_Countries_(Generalized)_2173680399808997149.geojson",
   quiet = TRUE
 )
 
@@ -248,7 +248,7 @@ sf and countrycode.
 
 Place the original UNDP CSV and world boundaries GeoJSON in
 the data folder, retaining the filenames used in this document.
-Open homework_gii.Rmd and click Knit.
+Open practical4_homework/homework_gii.Rmd and click Knit.
 
 ## Software environment
 

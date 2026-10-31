@@ -373,12 +373,12 @@ display: none;
 <div id="check-the-project-folder" class="section level2">
 <h2>Check the project folder</h2>
 <pre class="r"><code>getwd()</code></pre>
-<pre><code>## [1] &quot;C:/Users/A/Documents/Codex/2026-10-29/https-andrewmaclachlan-github-io-casa0005repo-git/outputs/casa0005-practical4&quot;</code></pre>
+<pre><code>## [1] &quot;C:/Users/A/Documents/Codex/2026-10-29/https-andrewmaclachlan-github-io-casa0005repo-git/outputs/casa0005-practical4/practical4_homework&quot;</code></pre>
 </div>
 <div id="read-the-original-data" class="section level2">
 <h2>Read the original data</h2>
 <pre class="r"><code>gii_raw &lt;- read.csv(
-  &quot;data/HDR25_Composite_indices_complete_time_series.csv&quot;
+  &quot;../data/HDR25_Composite_indices_complete_time_series.csv&quot;
 )
 
 dim(gii_raw)</code></pre>
@@ -481,7 +481,7 @@ records have missing change values. ## Prepare spatial analysis</p>
 <div id="read-the-world-boundaries" class="section level2">
 <h2>Read the world boundaries</h2>
 <pre class="r"><code>world &lt;- st_read(
-  &quot;data/World_Countries_(Generalized)_2173680399808997149.geojson&quot;,
+  &quot;../data/World_Countries_(Generalized)_2173680399808997149.geojson&quot;,
   quiet = TRUE
 )
 
@@ -667,7 +667,7 @@ counting separate map parts more than once.</p>
 countrycode.</p>
 <p>Place the original UNDP CSV and world boundaries GeoJSON in the data
 folder, retaining the filenames used in this document. Open
-homework_gii.Rmd and click Knit.</p>
+practical4_homework/homework_gii.Rmd and click Knit.</p>
 </div>
 <div id="software-environment" class="section level2">
 <h2>Software environment</h2>
@@ -680,11 +680,8 @@ homework_gii.Rmd and click Knit.</p>
 ##   LAPACK version 3.12.1
 ## 
 ## locale:
-## [1] LC_COLLATE=Chinese (Simplified)_China.utf8 
-## [2] LC_CTYPE=Chinese (Simplified)_China.utf8   
-## [3] LC_MONETARY=Chinese (Simplified)_China.utf8
-## [4] LC_NUMERIC=C                               
-## [5] LC_TIME=Chinese (Simplified)_China.utf8    
+## [1] C
+## system code page: 65001
 ## 
 ## time zone: Europe/London
 ## tzcode source: internal
@@ -701,9 +698,9 @@ homework_gii.Rmd and click Knit.</p>
 ##  [9] htmltools_0.5.9    e1071_1.7-17       sass_0.4.10        rmarkdown_2.32    
 ## [13] grid_4.6.1         evaluate_1.0.5     jquerylib_0.1.4    classInt_0.4-11   
 ## [17] fastmap_1.2.0      yaml_2.3.12        lifecycle_1.0.5    compiler_4.6.1    
-## [21] Rcpp_1.1.2         rstudioapi_0.19.0  digest_0.6.39      R6_2.6.1          
-## [25] class_7.3-23       bslib_0.12.0       tools_4.6.1        proxy_0.4-29      
-## [29] units_1.0-1        cachem_1.1.0</code></pre>
+## [21] Rcpp_1.1.2         digest_0.6.39      R6_2.6.1           class_7.3-23      
+## [25] bslib_0.12.0       tools_4.6.1        proxy_0.4-29       units_1.0-1       
+## [29] cachem_1.1.0</code></pre>
 </div>
 
 

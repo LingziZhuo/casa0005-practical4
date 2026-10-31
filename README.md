@@ -2,6 +2,27 @@
 
 Personal practice project for Git, GitHub and RMarkdown.
 
+## Practical 4 homework: GII change, 2010–2019
+
+The homework is in [practical4_homework](practical4_homework/):
+
+- [Analysis source](practical4_homework/homework_gii.Rmd)
+- [HTML report](practical4_homework/homework_gii.html) — download and open in a browser.
+
+The report compares GII in 2010 and 2019 and joins the results to world
+boundaries. Of 154 countries or territories with data for both years,
+145 recorded a decrease and 9 an increase; 41 additional records lack
+sufficient data to calculate change.
+
+Open the project, install `rmarkdown`, `sf`, and `countrycode` if needed,
+and place the original UNDP CSV and World Countries Generalized GeoJSON
+in the project-root `data/` folder, using the filenames in the source.
+Open `practical4_homework/homework_gii.Rmd` and click Knit.
+Data sources and methods are documented in the report.
+
+The root-level `practical4.Rmd`, `practical4.html`, and `prepare-data.R`
+belong to the introductory RMarkdown and WorldClim exercises.
+
 ## Open and render
 
 Open `casa0005-practical4.Rproj` in RStudio. On a new computer, run
